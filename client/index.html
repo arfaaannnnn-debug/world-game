@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>My World — Kerala Open World</title>
+<link rel="stylesheet" href="src/styles.css" />
+</head>
+<body>
+
+  <!-- ============ START MENU ============ -->
+  <div id="start-menu" class="screen">
+    <div class="menu-panel">
+      <h1 class="title">MY WORLD</h1>
+      <p class="subtitle">A little Kerala town, online with friends</p>
+      <button id="btn-play" class="menu-btn">PLAY GAME</button>
+      <button id="btn-how" class="menu-btn">HOW TO PLAY</button>
+      <button id="btn-about" class="menu-btn">ABOUT</button>
+    </div>
+  </div>
+
+  <!-- ============ HOW TO PLAY ============ -->
+  <div id="how-to-play" class="screen hidden">
+    <div class="menu-panel">
+      <h2>HOW TO PLAY</h2>
+      <ul class="howto-list">
+        <li><b>W A S D</b> — Move</li>
+        <li><b>SHIFT</b> — Run</li>
+        <li><b>SPACE</b> — Jump</li>
+        <li><b>Mouse drag</b> — Look around</li>
+        <li><b>E</b> — Interact (shops, players)</li>
+        <li><b>ESC</b> — Open menu</li>
+      </ul>
+      <button id="btn-back-1" class="menu-btn">BACK</button>
+    </div>
+  </div>
+
+  <!-- ============ ABOUT ============ -->
+  <div id="about-screen" class="screen hidden">
+    <div class="menu-panel">
+      <h2>ABOUT</h2>
+      <p>My World is a small 3D open-world multiplayer game set in a Kerala-style town.
+      Walk around, visit the tea shop, meet NPCs, and chat with other players online.</p>
+      <button id="btn-back-2" class="menu-btn">BACK</button>
+    </div>
+  </div>
+
+  <!-- ============ LOGIN ============ -->
+  <div id="login-screen" class="screen hidden">
+    <div class="menu-panel">
+      <h2>WELCOME TO MY WORLD</h2>
+      <label for="username-input" class="label">Username</label>
+      <input id="username-input" maxlength="16" placeholder="Enter your username" autocomplete="off" />
+      <div id="login-error" class="error-text hidden"></div>
+      <button id="btn-enter-world" class="menu-btn primary">ENTER WORLD</button>
+    </div>
+  </div>
+
+  <!-- ============ GAME ============ -->
+  <div id="game-container" class="hidden">
+    <canvas id="game-canvas"></canvas>
+
+    <!-- Interaction prompt -->
+    <div id="interact-prompt" class="hud hidden">Press <b>E</b> to interact</div>
+
+    <!-- Tea shop menu -->
+    <div id="tea-shop-menu" class="modal hidden">
+      <div class="modal-panel">
+        <h2>CHAYA KADA</h2>
+        <p class="shop-sub">TEA &amp; SNACKS</p>
+        <div class="shop-items">
+          <div class="shop-item"><span>Tea</span><span>₹10</span></div>
+          <div class="shop-item"><span>Coffee</span><span>₹15</span></div>
+          <div class="shop-item"><span>Parippu Vada</span><span>₹12</span></div>
+          <div class="shop-item"><span>Pazham Pori</span><span>₹15</span></div>
+        </div>
+        <div id="shop-toast" class="shop-toast hidden"></div>
+        <div class="modal-actions">
+          <button id="btn-buy" class="menu-btn primary">BUY</button>
+          <button id="btn-close-shop" class="menu-btn">CLOSE</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Player nearby interaction -->
+    <div id="player-interact-menu" class="modal hidden">
+      <div class="modal-panel small">
+        <h3 id="pi-name">Player</h3>
+        <button class="menu-btn primary" id="btn-pi-message">Message</button>
+        <button class="menu-btn" id="btn-pi-profile">View Profile</button>
+        <button class="menu-btn" id="btn-pi-close">Close</button>
+      </div>
+    </div>
+
+    <!-- Player profile -->
+    <div id="profile-modal" class="modal hidden">
+      <div class="modal-panel small">
+        <h3>PLAYER PROFILE</h3>
+        <p>Username: <b id="profile-username">-</b></p>
+        <p>Status: <span class="online-dot"></span> Online</p>
+        <button class="menu-btn primary" id="btn-profile-message">SEND MESSAGE</button>
+        <button class="menu-btn" id="btn-profile-friend">ADD FRIEND</button>
+        <button class="menu-btn danger" id="btn-profile-block">BLOCK</button>
+        <button class="menu-btn" id="btn-profile-close">CLOSE</button>
+      </div>
+    </div>
+
+    <!-- HUD top -->
+    <div class="hud top-left">Username: <b id="hud-username">-</b></div>
+    <div class="hud top-right">ONLINE: <b id="hud-online">1</b></div>
+
+    <!-- HUD bottom controls -->
+    <div class="hud bottom-right controls-hint">
+      <div>[E] INTERACT</div>
+      <div>[SHIFT] RUN</div>
+      <div>[SPACE] JUMP</div>
+    </div>
+
+    <!-- Minimap -->
+    <div class="hud minimap-wrap">
+      <canvas id="minimap" width="150" height="150"></canvas>
+    </div>
+
+    <!-- HUD buttons -->
+    <div class="hud hud-buttons">
+      <button class="hud-btn" id="btn-toggle-chat">CHAT</button>
+      <button class="hud-btn" id="btn-toggle-players">PLAYERS</button>
+      <button class="hud-btn" id="btn-toggle-friends">FRIENDS</button>
+      <button class="hud-btn" id="btn-toggle-settings">SETTINGS</button>
+    </div>
+
+    <!-- Global chat panel -->
+    <div id="global-chat-panel" class="panel hidden">
+      <div class="panel-header">GLOBAL CHAT <span class="panel-close" data-close="global-chat-panel">✕</span></div>
+      <div id="global-chat-log" class="chat-log"></div>
+      <div class="chat-input-row">
+        <input id="global-chat-input" maxlength="250" placeholder="Write message..." />
+        <button id="btn-global-send" class="hud-btn small">SEND</button>
+      </div>
+    </div>
+
+    <!-- Online players panel -->
+    <div id="players-panel" class="panel hidden">
+      <div class="panel-header">ONLINE PLAYERS <span class="panel-close" data-close="players-panel">✕</span></div>
+      <div id="players-list" class="list"></div>
+    </div>
+
+    <!-- Friends panel -->
+    <div id="friends-panel" class="panel hidden">
+      <div class="panel-header">FRIENDS <span class="panel-close" data-close="friends-panel">✕</span></div>
+      <div id="friends-list" class="list"><div class="empty-note">No friends added yet.</div></div>
+    </div>
+
+    <!-- Settings panel -->
+    <div id="settings-panel" class="panel hidden">
+      <div class="panel-header">SETTINGS <span class="panel-close" data-close="settings-panel">✕</span></div>
+      <div class="settings-row">
+        <label>Graphics</label>
+        <select id="set-graphics">
+          <option value="low">Low</option>
+          <option value="medium" selected>Medium</option>
+          <option value="high">High</option>
+        </select>
+      </div>
+      <div class="settings-row">
+        <label>Shadows</label>
+        <input type="checkbox" id="set-shadows" checked />
+      </div>
+      <div class="settings-row">
+        <label>Mouse Sensitivity</label>
+        <input type="range" id="set-sensitivity" min="1" max="10" value="5" />
+      </div>
+      <div class="settings-row">
+        <label>Volume</label>
+        <input type="range" id="set-volume" min="0" max="100" value="60" />
+      </div>
+    </div>
+
+    <!-- Private chat window -->
+    <div id="private-chat-panel" class="panel hidden">
+      <div class="panel-header">Chat with <span id="pc-username">-</span> <span class="panel-close" id="pc-close">✕</span></div>
+      <div id="private-chat-log" class="chat-log"></div>
+      <div class="chat-input-row">
+        <input id="private-chat-input" maxlength="250" placeholder="Type message..." />
+        <button id="btn-private-send" class="hud-btn small">SEND</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Socket.IO client served automatically by the server -->
+  <script src="/socket.io/socket.io.js"></script>
+  <!-- Three.js via CDN, loaded as ES module -->
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+      }
+    }
+  </script>
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>

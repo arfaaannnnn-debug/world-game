@@ -1,0 +1,15 @@
+{
+  "name": "open-world-game",
+  "version": "0.1.0",
+  "description": "3D open-world multiplayer Kerala town game - MVP",
+  "main": "server/server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server/server.js",
+    "dev": "node server/server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "socket.io": "^4.7.5"
+  }
+}
